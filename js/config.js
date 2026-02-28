@@ -1,11 +1,14 @@
 // API配置
 const CONFIG = {
-    // xAI Grok API配置
+    // API配置（Key 由用户在界面输入，存 localStorage）
     api: {
-        key: 'sk-zk216a4ba9d5fbea9b112ad497c455b9cc169a200773ad4f',
-        baseURL: 'https://api.zhizengzeng.com/xai/v1',
-        model: 'grok-beta',  // 使用grok-beta作为主模型
-        embeddingModel: 'grok-beta'  // Grok也用于embedding
+        defaultBaseURL: 'https://api.zhizengzeng.com/xai/v1',
+        defaultModel: 'grok-beta',
+        defaultEmbeddingModel: 'grok-beta',
+        get key() { return localStorage.getItem('novel_api_key') || ''; },
+        get baseURL() { return localStorage.getItem('novel_api_base') || this.defaultBaseURL; },
+        get model() { return localStorage.getItem('novel_api_model') || this.defaultModel; },
+        get embeddingModel() { return localStorage.getItem('novel_embedding_model') || this.defaultEmbeddingModel; }
     },
 
     // 上下文管理配置

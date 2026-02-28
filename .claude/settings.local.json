@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "user-prompt-submit": {
+      "command": "python",
+      "args": [
+        "-c",
+        "import os; path = 'Yongan/docx/00-总索引.md'; print(f'📋 项目记录：{path}' if os.path.exists(path) else '⚠️ 项目记录不存在，如有重要进展请创建记录')"
+      ],
+      "description": "提醒 AI 检查项目记录"
+    }
+  }
+}

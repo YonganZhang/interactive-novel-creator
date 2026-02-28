@@ -1,13 +1,15 @@
 // OpenAI API客户端（兼容xAI Grok API）
 class OpenAIClient {
     constructor() {
-        this.apiKey = CONFIG.api.key;
-        this.baseURL = CONFIG.api.baseURL;
-        this.model = CONFIG.api.model;
-        this.embeddingModel = CONFIG.api.embeddingModel;
         this.timeout = 30000; // 30秒超时
         this.maxRetries = 3;
     }
+
+    // 动态读取，用户随时可改
+    get apiKey() { return CONFIG.api.key; }
+    get baseURL() { return CONFIG.api.baseURL; }
+    get model() { return CONFIG.api.model; }
+    get embeddingModel() { return CONFIG.api.embeddingModel; }
 
     /**
      * 发送聊天请求

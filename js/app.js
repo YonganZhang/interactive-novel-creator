@@ -9,6 +9,12 @@ class App {
         try {
             console.log('初始化应用...');
 
+            // 0. 检查 API Key
+            if (!CONFIG.api.key) {
+                this.showApiKeyDialog();
+                return;
+            }
+
             // 1. 初始化数据库
             await storageManager.initDB();
             console.log('数据库初始化完成');
@@ -156,6 +162,37 @@ class App {
         }
     }
 
+    // 显示 API Key 设置弹窗
+    showApiKeyDialog() {
+        const dialog = document.getElementById('api-key-dialog');
+        const keyInput = document.getElementById('api-key-input');
+        const baseInput = document.getElementById('api-base-input');
+        const modelInput = document.getElementById('api-model-input');
+        const saveBtn = document.getElementById('api-key-save');
+
+        // 回填已有值
+        keyInput.value = CONFIG.api.key;
+        baseInput.value = localStorage.getItem('novel_api_base') || '';
+        modelInput.value = localStorage.getItem('novel_api_model') || '';
+
+        dialog.style.display = 'flex';
+        keyInput.focus();
+
+        const onSave = () => {
+            const key = keyInput.value.trim();
+            if (!key) { alert('请输入 API Key'); return; }
+            localStorage.setItem('novel_api_key', key);
+            const base = baseInput.value.trim();
+            const model = modelInput.value.trim();
+            if (base) localStorage.setItem('novel_api_base', base);
+            if (model) localStorage.setItem('novel_api_model', model);
+            dialog.style.display = 'none';
+            saveBtn.removeEventListener('click', onSave);
+            this.init(); // 重新初始化
+        };
+        saveBtn.addEventListener('click', onSave);
+    }
+
     // 显示项目列表
     async showProjectList() {
         try {
@@ -230,6 +267,7 @@ window.addEventListener('DOMContentLoaded', () => {
                             <button class="btn-secondary" onclick="app.createNewProject(); document.getElementById('main-menu').remove();" style="margin-bottom: 8px;">创建新项目</button>
                             <button class="btn-secondary" onclick="creationInterface.exportConversation(); document.getElementById('main-menu').remove();" style="margin-bottom: 8px;">导出对话</button>
                             <button class="btn-secondary" onclick="contextManager.manualCompress(creationInterface.sessionId); document.getElementById('main-menu').remove();" style="margin-bottom: 8px;">手动压缩</button>
+                            <button class="btn-secondary" onclick="app.showApiKeyDialog(); document.getElementById('main-menu').remove();" style="margin-bottom: 8px;">API 设置</button>
                         </div>
                     </div>
                 </div>
