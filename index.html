@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>交互式小说创作系统</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- 初始化向导 -->
+    <div id="init-wizard" class="wizard-container">
+        <div class="wizard-content">
+            <h1>创建你的故事世界</h1>
+            <div id="wizard-step" class="wizard-step"></div>
+            <div class="wizard-input">
+                <textarea id="wizard-answer" placeholder="请输入你的回答..." rows="4"></textarea>
+                <button id="wizard-next" class="btn-primary">下一步</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主创作界面 -->
+    <div id="main-app" class="app-container" style="display: none;">
+        <!-- 顶部工具栏 -->
+        <header class="app-header">
+            <button id="toggle-memory" class="icon-btn">📚</button>
+            <h2 id="project-title">我的故事</h2>
+            <button id="menu-btn" class="icon-btn">⋮</button>
+        </header>
+
+        <!-- 记忆面板（侧边栏） -->
+        <aside id="memory-panel" class="memory-panel">
+            <div class="panel-header">
+                <h3>记忆库</h3>
+                <button id="close-memory" class="icon-btn">✕</button>
+            </div>
+            <div class="memory-tabs">
+                <button class="tab active" data-type="all">全部</button>
+                <button class="tab" data-type="character">角色</button>
+                <button class="tab" data-type="location">场景</button>
+                <button class="tab" data-type="event">事件</button>
+            </div>
+            <div id="memory-list" class="memory-list"></div>
+            <button id="add-memory" class="btn-secondary">+ 添加记忆</button>
+        </aside>
+
+        <!-- 对话历史区域 -->
+        <main class="chat-container">
+            <div id="history-display" class="history-display"></div>
+            <div id="context-indicator" class="context-indicator">
+                <span id="token-usage">Token: 0 / 8000</span>
+            </div>
+        </main>
+
+        <!-- 输入区域 -->
+        <footer class="input-container">
+            <textarea id="user-input" placeholder="描述角色的行动..." rows="2"></textarea>
+            <button id="send-btn" class="btn-primary">发送</button>
+        </footer>
+    </div>
+
+    <!-- 加载指示器 -->
+    <div id="loading" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>AI正在创作中...</p>
+    </div>
+
+    <!-- 第三方库 -->
+    <script src="libs/idb.js"></script>
+    <script src="libs/tiktoken.js"></script>
+
+    <!-- 核心模块 -->
+    <script src="js/config.js"></script>
+    <script src="js/core/storage-manager.js"></script>
+    <script src="js/core/openai-client.js"></script>
+    <script src="js/core/token-counter.js"></script>
+    <script src="js/core/embedding-engine.js"></script>
+
+    <!-- 工具模块 -->
+    <script src="js/utils/vector-math.js"></script>
+    <script src="js/utils/text-processor.js"></script>
+
+    <!-- 记忆模块 -->
+    <script src="js/memory/memory-types.js"></script>
+    <script src="js/memory/memory-manager.js"></script>
+    <script src="js/memory/memory-retriever.js"></script>
+
+    <!-- 上下文模块 -->
+    <script src="js/context/context-builder.js"></script>
+    <script src="js/context/summarizer.js"></script>
+    <script src="js/context/context-manager.js"></script>
+
+    <!-- UI模块 -->
+    <script src="js/ui/init-wizard.js"></script>
+    <script src="js/ui/creation-interface.js"></script>
+    <script src="js/ui/memory-panel.js"></script>
+    <script src="js/ui/history-display.js"></script>
+
+    <!-- 应用主控制器 -->
+    <script src="js/app.js"></script>
+</body>
+</html>
