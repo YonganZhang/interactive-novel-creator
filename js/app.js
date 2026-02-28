@@ -242,12 +242,52 @@ class App {
     }
 }
 
+// SHA-256 哈希工具
+async function sha256(text) {
+    const data = new TextEncoder().encode(text);
+    const buf = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 // 创建全局应用实例
 const app = new App();
 
-// 页面加载完成后初始化
+// 页面加载完成后：先检查登录状态
 window.addEventListener('DOMContentLoaded', () => {
-    app.init();
+    const overlay = document.getElementById('login-overlay');
+
+    // 已登录 → 直接进入
+    if (sessionStorage.getItem('novel_authed') === '1') {
+        overlay.style.display = 'none';
+        app.init();
+        return;
+    }
+
+    // 未登录 → 绑定登录表单
+    const userInput = document.getElementById('login-user');
+    const passInput = document.getElementById('login-pass');
+    const loginBtn = document.getElementById('login-btn');
+    const errorMsg = document.getElementById('login-error');
+
+    const doLogin = async () => {
+        const [uHash, pHash] = await Promise.all([
+            sha256(userInput.value.trim()),
+            sha256(passInput.value)
+        ]);
+        if (uHash === CONFIG.auth.usernameHash && pHash === CONFIG.auth.passwordHash) {
+            sessionStorage.setItem('novel_authed', '1');
+            overlay.style.display = 'none';
+            app.init();
+        } else {
+            errorMsg.style.display = 'block';
+            passInput.value = '';
+            passInput.focus();
+        }
+    };
+
+    loginBtn.addEventListener('click', doLogin);
+    passInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    userInput.addEventListener('keydown', e => { if (e.key === 'Enter') passInput.focus(); });
 });
 
 // 添加菜单按钮事件
