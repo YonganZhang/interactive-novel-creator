@@ -348,21 +348,6 @@ class StorageManager {
     });
   }
 
-        putRequest.onsuccess = () => {
-          resolve();
-        };
-
-        putRequest.onerror = () => {
-          reject(new Error('Failed to update memory: ' + putRequest.error));
-        };
-      };
-
-      getRequest.onerror = () => {
-        reject(new Error('Failed to get memory: ' + getRequest.error));
-      };
-    });
-  }
-
   /**
    * 创建对话
    * @param {Object} data - 对话数据
